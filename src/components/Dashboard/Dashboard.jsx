@@ -16,7 +16,8 @@ const Dashboard = () => {
   const navigate = useNavigate();
 
   const handleDocClick = (docId) => {
-    navigate(`/results/${docId}`);
+    // navigate(`/results/${docId}`);
+	navigate(`/result`);
   };
 
   const handleUpload = () => {

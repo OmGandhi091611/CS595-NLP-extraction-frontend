@@ -37,8 +37,10 @@ const Login = () => {
         password,
       });
 
-      // Set user context with demo info (replace with real API data as needed)
-      setUser({ name: username, email: `${username}@example.com` });
+      // Store user info in localStorage
+      const userObj = { name: username, email: `${username}@example.com` };
+      localStorage.setItem('user', JSON.stringify(userObj));
+      setUser(userObj);
 
       window.alert(response.data.msg);
       navigate("/dashboard");

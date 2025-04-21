@@ -1,14 +1,11 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-// import { UserContext } from '../context/UserContext';
+import { UserContext } from '../context/UserContext';
 
 const Navbar = () => {
   const location = useLocation();
-  // const { user } = useContext(UserContext);
-  const user = {
-    name: 'John Doe',
-    email: 'johndoe@example.com'
-  };
+  const { user } = useContext(UserContext);
+
 
   // Don't show user info on login page
   const showUser = user && location.pathname !== '/';

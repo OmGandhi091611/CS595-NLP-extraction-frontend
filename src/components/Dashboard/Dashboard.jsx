@@ -1,27 +1,80 @@
-import React from 'react'
+import axios from 'axios';
+import React, { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom';
 
-const demoProfile = {
-  name: 'John Doe',
-  email: 'johndoe@example.com'
-};
+const baseUrl = import.meta.env.VITE_API_BASE_URL;
 
-const demoDocuments = [
-  { id: 1, name: 'Radiological Report 1/2.pdf' },
-  { id: 2, name: 'Radiological Report 2/12.pdf' },
-  { id: 3, name: 'Radiological Report 3/12.pdf' }
+const demoAPIDocs = [
+	{
+		"id": 1,
+		"filename": "HIPAA_Awareness_for_Business_Associates_Certificate_for_Nirmal_Patel.pdf",
+		"content_type": "application/pdf",
+		"uploaded_at": "2025-04-21T05:54:52.453835",
+		"uploader": "anonymous"
+	},
+	{
+		"id": 2,
+		"filename": "I don't love you anymore _ moving on and living your best -- Rithvik Singh -- 1, 2024 -- Penguin Random House India Private Limited -- 9780143469131 -- 0ad687b3daca3ec2c0be06eda46af5ed -- Anna’s Archive.pdf",
+		"content_type": "application/pdf",
+		"uploaded_at": "2025-04-21T06:00:48.166523",
+		"uploader": "anonymous"
+	}
 ];
 
 const Dashboard = () => {
   const navigate = useNavigate();
 
+  const [documents, setDocuments] = useState([]);
+
   const handleDocClick = (docId) => {
-    // navigate(`/results/${docId}`);
-	navigate(`/result`);
+	navigate(`/results/${docId}`);
   };
 
-  const handleUpload = () => {
-    alert('Upload functionality coming soon!');
+  const handleUpload = async () => {
+    const input = document.createElement("input");
+    input.type = "file";
+    input.accept = ".pdf,.txt";
+    input.onchange = async (e) => {
+      const file = e.target.files[0];
+      if (file) {
+        try {
+          const formData = new FormData();
+          formData.append("file", file);
+
+          const response = await axios.post(
+            `${baseUrl}/document/upload`,
+            formData,
+            {
+              headers: {
+                "Content-Type": "multipart/form-data",
+              },
+            }
+          );
+
+          console.log("Upload successful:", response.data);
+          alert("File uploaded successfully!");
+        } catch (error) {
+          console.error("Upload failed:", error);
+          alert("Failed to upload file.");
+        }
+      }
+    };
+    input.click();
+  };
+
+  useEffect(() => {
+    fetchDocuments();
+  }, []);
+
+  const fetchDocuments = async () => {
+    try {
+      const response = await axios.get(`${baseUrl}/document`);
+      if (response.data && response.data.files) {
+        setDocuments(response.data.files);
+      }
+    } catch (error) {
+      console.error("Error fetching documents:", error);
+    }
   };
 
   return (
@@ -46,7 +99,7 @@ const Dashboard = () => {
           </button>
         </div>
         <ul style={{ listStyle: 'none', padding: 0, margin: 0 }}>
-          {demoDocuments.map(doc => (
+          {demoAPIDocs.map(doc => (
             <li key={doc.id}>
               <button
                 onClick={() => handleDocClick(doc.id)}
@@ -68,7 +121,7 @@ const Dashboard = () => {
                 onMouseOver={e => e.currentTarget.style.background = '#f3f4f6'}
                 onMouseOut={e => e.currentTarget.style.background = '#fff'}
               >
-                {doc.name}
+                {doc.filename}
               </button>
             </li>
           ))}

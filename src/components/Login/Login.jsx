@@ -10,8 +10,9 @@ import {
   Typography,
 } from "@mui/material";
 import axios from "axios";
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
+import { UserContext } from '../../context/UserContext';
 
 const baseUrl = import.meta.env.VITE_API_BASE_URL;
 
@@ -19,6 +20,7 @@ const Login = () => {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+  const { setUser } = useContext(UserContext);
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -34,6 +36,9 @@ const Login = () => {
         username,
         password,
       });
+
+      // Set user context with demo info (replace with real API data as needed)
+      setUser({ name: username, email: `${username}@example.com` });
 
       window.alert(response.data.msg);
       navigate("/dashboard");

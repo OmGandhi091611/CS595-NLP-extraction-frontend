@@ -7,9 +7,9 @@ const demoProfile = {
 };
 
 const demoDocuments = [
-  { id: 1, name: 'Resume.pdf' },
-  { id: 2, name: 'Project_Proposal.docx' },
-  { id: 3, name: 'Notes.txt' }
+  { id: 1, name: 'Radiological Report 1/2.pdf' },
+  { id: 2, name: 'Radiological Report 2/12.pdf' },
+  { id: 3, name: 'Radiological Report 3/12.pdf' }
 ];
 
 const Dashboard = () => {
@@ -25,9 +25,9 @@ const Dashboard = () => {
   };
 
   return (
-    <div style={{ maxWidth: 700, margin: '40px auto', padding: 32, background: '#fafbfc', borderRadius: 16, boxShadow: '0 4px 24px #e5e7eb' }}>
+    <div style={{ width: '90%', margin: '40px auto', padding: 32, background: '#fafbfc', borderRadius: 16, boxShadow: '0 4px 24px #e5e7eb' }}>
       {/* Profile Section */}
-      <section style={{ marginBottom: 36, paddingBottom: 18, borderBottom: '1px solid #e5e7eb', display: 'flex', alignItems: 'center', gap: 32 }}>
+      {/* <section style={{ marginBottom: 36, paddingBottom: 18, borderBottom: '1px solid #e5e7eb', display: 'flex', alignItems: 'center', gap: 32 }}>
         <div style={{ width: 64, height: 64, background: '#e0e7ef', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 32, color: '#7b8794', fontWeight: 700 }}>
           {demoProfile.name[0]}
         </div>
@@ -35,7 +35,7 @@ const Dashboard = () => {
           <div style={{ fontSize: 20, fontWeight: 600, color: '#23272f', marginBottom: 4 }}>{demoProfile.name}</div>
           <div style={{ fontSize: 15, color: '#6b7280' }}>{demoProfile.email}</div>
         </div>
-      </section>
+      </section> */}
 
       {/* Document Section */}
       <section>

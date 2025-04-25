@@ -1,23 +1,41 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { UserContext } from '../context/UserContext';
-import { Box, Typography } from '@mui/material';
+import { Box, Typography, Menu, MenuItem, IconButton } from '@mui/material';
 
 const Navbar = () => {
   const location = useLocation();
   const navigate = useNavigate();
-  const { user } = useContext(UserContext);
+  const { user, setUser } = useContext(UserContext);
+  const [anchorEl, setAnchorEl] = useState(null);
+  const open = Boolean(anchorEl);
 
   // Don't show user info on login or signup page
   const showUser = user && location.pathname !== '/' && location.pathname !== '/signup';
 
-  // Handle logo click: only redirect to /dashboard if on / or /signup
+  // Handle logo click: only redirect to /dashboard if not already inside
   const handleLogoClick = (e) => {
     if (location.pathname === '/' || location.pathname === '/signup') {
       e.preventDefault(); // Prevent redirect if on / or /signup
     } else {
       navigate('/dashboard');
     }
+  };
+
+  // Avatar (user badge) click handler
+  const handleAvatarClick = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleMenuClose = () => {
+    setAnchorEl(null);
+  };
+
+  const handleLogout = () => {
+    setAnchorEl(null);
+    localStorage.clear();
+    setUser(null);
+    navigate('/');
   };
 
   return (
@@ -47,13 +65,25 @@ const Navbar = () => {
         <Box sx={{ display: 'flex', gap: 3, alignItems: 'center' }}>
           {/* Add navigation links back if needed */}
           {showUser && (
-            <Box sx={{ color: '#e0e0e0', fontWeight: 500, fontSize: 15, display: 'flex', alignItems: 'center', gap: 1.5 }}>
-              <Box sx={{ background: '#444', borderRadius: '50%', width: 32, height: 32, display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 700, fontSize: 16 }}>
-                {user.name[0].toUpperCase()}
-              </Box>
-              <Typography component="span" sx={{ color: '#e0e0e0', fontWeight: 500, fontSize: 15 }}>{user.name}</Typography>
-              {/* <Typography component="span" sx={{ color: '#bbb', fontSize: 13 }}>({user.email})</Typography> */}
-            </Box>
+            <>
+              <IconButton onClick={handleAvatarClick} sx={{ p: 0, background: 'none', '&:hover': { background: 'none' } }}>
+                <Box sx={{ background: '#444', borderRadius: '50%', width: 32, height: 32, display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 700, fontSize: 16, color: '#fff', marginRight: 1 }}>
+                  {user.name[0].toUpperCase()}
+                </Box>
+                <Typography component="span" sx={{ color: '#e0e0e0', fontWeight: 500, fontSize: 15 }}>{user.name}</Typography>
+                {/* <Typography component="span" sx={{ color: '#bbb', fontSize: 13 }}>({user.email})</Typography> */}
+              </IconButton>
+              <Menu
+                anchorEl={anchorEl}
+                open={open}
+                onClose={handleMenuClose}
+                anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
+                transformOrigin={{ vertical: 'top', horizontal: 'right' }}
+                PaperProps={{ sx: { mt: 1, minWidth: 120 } }}
+              >
+                <MenuItem onClick={handleLogout}>Log out</MenuItem>
+              </Menu>
+            </>
           )}
         </Box>
       </Box>

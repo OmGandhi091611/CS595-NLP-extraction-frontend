@@ -89,7 +89,7 @@ const ResultScreen = () => {
 	} 
 
   return (
-    <Container maxWidth="md" sx={{ mt: 5 }}>
+    <Container maxWidth="xl" sx={{ mt: 5 }}>
       <Typography variant="h4" gutterBottom>
         Report Results
       </Typography>

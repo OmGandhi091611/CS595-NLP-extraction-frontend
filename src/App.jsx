@@ -5,7 +5,7 @@ import Signup from './components/Signup/Signup'
 import Dashboard from './components/Dashboard/Dashboard'
 import ResultScreen from './components/Results/ResultScreen'
 import Navbar from './components/Navbar'
-import Results from './components/Results'
+// import Results from './components/Results'
 import { UserProvider } from './context/UserContext'
 
 const App = () => {
@@ -19,7 +19,7 @@ const App = () => {
             <Route path='/signup' element={<Signup />} />
             <Route path='/dashboard' element={<Dashboard />} />
             <Route path='/results/:uuid' element={<ResultScreen />} />
-            <Route path='/result/:id' element={<Results />} /> 
+            {/* <Route path='/result/:id' element={<Results />} />  */}
           </Routes>
         </div>
       </Router>

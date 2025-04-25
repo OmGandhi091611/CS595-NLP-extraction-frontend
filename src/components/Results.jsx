@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useParams } from 'react-router-dom';
+import { Box, Typography, Paper, Button, TextField } from '@mui/material';
 
 // Demo data for document content and analysis
 const demoDocuments = {
@@ -43,51 +44,54 @@ const Results = () => {
   };
 
   return (
-    <div style={{ maxWidth: 1000, margin: '40px auto', display: 'flex', flexDirection: 'column', gap: 32 }}>
+    <Box sx={{ maxWidth: 1000, margin: '40px auto', display: 'flex', flexDirection: 'column', gap: 4 }}>
       {/* Document Window */}
-      <section style={{ background: '#fff', borderRadius: 12, boxShadow: '0 2px 8px #ececec', padding: 24, minHeight: 180, marginBottom: 0 }}>
-        <h2 style={{ fontSize: 20, color: '#23272f', marginBottom: 12 }}>{doc.name}</h2>
-        <pre style={{ whiteSpace: 'pre-wrap', color: '#444', fontSize: 15, fontFamily: 'inherit' }}>{doc.content}</pre>
-      </section>
+      <Paper elevation={2} sx={{ borderRadius: 3, boxShadow: '0 2px 8px #ececec', p: 3, minHeight: 180, mb: 0 }}>
+        <Typography variant="h6" sx={{ fontSize: 20, color: '#23272f', mb: 1 }}>{doc.name}</Typography>
+        <Typography component="pre" sx={{ whiteSpace: 'pre-wrap', color: '#444', fontSize: 15, fontFamily: 'inherit' }}>{doc.content}</Typography>
+      </Paper>
       {/* Analysis Section */}
-      <section style={{ background: '#f8fafc', borderRadius: 12, boxShadow: '0 2px 8px #ececec', padding: 24, minHeight: 120, marginBottom: 0 }}>
-        <h3 style={{ fontSize: 18, color: '#23272f', marginBottom: 10 }}>Analysis</h3>
-        <div style={{ color: '#555', fontSize: 15 }}>{analysis}</div>
-      </section>
+      <Paper elevation={1} sx={{ background: '#f8fafc', borderRadius: 3, boxShadow: '0 2px 8px #ececec', p: 3, minHeight: 120, mb: 0 }}>
+        <Typography variant="subtitle1" sx={{ fontSize: 18, color: '#23272f', mb: 1 }}>Analysis</Typography>
+        <Typography sx={{ color: '#555', fontSize: 15 }}>{analysis}</Typography>
+      </Paper>
       {/* Chat Section */}
-      <section style={{ background: '#f9fafb', borderRadius: 12, boxShadow: '0 2px 8px #ececec', padding: 24, minHeight: 180, display: 'flex', flexDirection: 'column', gap: 12 }}>
-        <h3 style={{ fontSize: 18, color: '#23272f', marginBottom: 10 }}>Chat</h3>
-        <div style={{ flex: 1, overflowY: 'auto', marginBottom: 12, maxHeight: 220 }}>
+      <Paper elevation={0} sx={{ background: '#f9fafb', borderRadius: 3, boxShadow: '0 2px 8px #ececec', p: 3, minHeight: 180, display: 'flex', flexDirection: 'column', gap: 1.5 }}>
+        <Typography variant="subtitle1" sx={{ fontSize: 18, color: '#23272f', mb: 1 }}>Chat</Typography>
+        <Box sx={{ flex: 1, overflowY: 'auto', mb: 1.5, maxHeight: 220 }}>
           {chat.map((msg, idx) => (
-            <div key={idx} style={{
+            <Box key={idx} sx={{
               background: msg.sender === 'user' ? '#e0e7ef' : '#f3f4f6',
               color: '#23272f',
-              borderRadius: 8,
-              padding: '8px 12px',
-              marginBottom: 6,
+              borderRadius: 2,
+              p: '8px 12px',
+              mb: 0.75,
               alignSelf: msg.sender === 'user' ? 'flex-end' : 'flex-start',
               maxWidth: '90%'
             }}>
               <strong style={{ fontWeight: 500 }}>{msg.sender === 'user' ? 'You' : 'System'}:</strong> {msg.text}
-            </div>
+            </Box>
           ))}
-        </div>
-        <div style={{ display: 'flex', gap: 8 }}>
-          <input
-            type="text"
+        </Box>
+        <Box sx={{ display: 'flex', gap: 1 }}>
+          <TextField
+            variant="outlined"
+            size="small"
             value={input}
             onChange={e => setInput(e.target.value)}
             onKeyDown={e => { if (e.key === 'Enter') handleSend(); }}
             placeholder="Type your message..."
-            style={{ flex: 1, padding: '8px 12px', borderRadius: 8, border: '1px solid #e5e7eb', fontSize: 15 }}
+            sx={{ flex: 1, borderRadius: 2, background: '#fff' }}
+            InputProps={{ sx: { borderRadius: 2, fontSize: 15 } }}
           />
-          <button
+          <Button
             onClick={handleSend}
-            style={{ background: '#23272f', color: '#fff', border: 'none', borderRadius: 8, padding: '8px 20px', fontWeight: 500, fontSize: 15, cursor: 'pointer' }}
-          >Send</button>
-        </div>
-      </section>
-    </div>
+            variant="contained"
+            sx={{ background: '#23272f', color: '#fff', borderRadius: 2, p: '8px 20px', fontWeight: 500, fontSize: 15, textTransform: 'none', boxShadow: 'none', '&:hover': { background: '#111827' } }}
+          >Send</Button>
+        </Box>
+      </Paper>
+    </Box>
   );
 };
 

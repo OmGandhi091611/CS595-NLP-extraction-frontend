@@ -1,6 +1,7 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { Box, Button, Typography, Paper, List, ListItem } from "@mui/material";
 
 const baseUrl = import.meta.env.VITE_API_BASE_URL;
 
@@ -36,7 +37,6 @@ const demoAPIDocs = [
 
 const Dashboard = () => {
   const navigate = useNavigate();
-
   const [documents, setDocuments] = useState([]);
 
   useEffect(() => {
@@ -89,138 +89,83 @@ const Dashboard = () => {
     input.click();
   };
 
-  console.log(documents);
+  // Use demoAPIDocs for display
+  const docsToShow = demoAPIDocs;
 
   return (
-    <div
-      style={{
-        width: "90%",
-        margin: "40px auto",
-        padding: 32,
-        background: "#fafbfc",
-        borderRadius: 16,
-        boxShadow: "0 4px 24px #e5e7eb",
-      }}
-    >
-      {/* Profile Section */}
-      {/* <section style={{ marginBottom: 36, paddingBottom: 18, borderBottom: '1px solid #e5e7eb', display: 'flex', alignItems: 'center', gap: 32 }}>
-        <div style={{ width: 64, height: 64, background: '#e0e7ef', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 32, color: '#7b8794', fontWeight: 700 }}>
-          {demoProfile.name[0]}
-        </div>
-        <div>
-          <div style={{ fontSize: 20, fontWeight: 600, color: '#23272f', marginBottom: 4 }}>{demoProfile.name}</div>
-          <div style={{ fontSize: 15, color: '#6b7280' }}>{demoProfile.email}</div>
-        </div>
-      </section> */}
-
-      {/* Document Section */}
-      <section>
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "space-between",
-            alignItems: "center",
-            marginBottom: 14,
+    <Box sx={{ width: '90%', margin: '40px auto', p: 4, background: '#fafbfc', borderRadius: 2 }}>
+      <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2, pb: 1, borderBottom: '1px solid #e5e7eb' }}>
+        <Typography variant="h5" sx={{ color: '#23272f', m: 0, fontWeight: 600 }}>
+          Documents
+        </Typography>
+        <Button
+          onClick={handleUpload}
+          sx={{
+            background: '#e5e7eb',
+            color: '#23272f',
+            borderRadius: 1,
+            p: '8px 20px',
+            fontWeight: 500,
+            fontSize: 15,
+            boxShadow: '0 1px 2px #e5e7eb',
+            textTransform: 'none',
+            '&:hover': { background: '#e0e7ef' }
           }}
         >
-          <h2
-            style={{
-              color: "#23272f",
-              fontSize: 20,
-              margin: 0,
-              fontWeight: 600,
-            }}
-          >
-            Documents
-          </h2>
-          <button
-            onClick={handleUpload}
-            style={{
-              background: "#e5e7eb",
-              color: "#23272f",
-              border: "none",
-              borderRadius: 8,
-              padding: "8px 20px",
-              cursor: "pointer",
-              fontWeight: 500,
-              fontSize: 15,
-              boxShadow: "0 1px 2px #e5e7eb",
-            }}
-          >
-            Upload Document
-          </button>
-        </div>
-        <ul style={{ listStyle: "none", padding: 0, margin: 0 }}>
-          {documents.length > 0 ? (
-            <ul style={{ listStyle: "none", padding: 0, margin: 0 }}>
-              {documents.map((doc) => (
-                <li key={doc.uuid}>
-                  <button
-                    onClick={() => handleDocClick(doc.uuid)}
-                    style={{
-                      width: "100%",
-                      textAlign: "left",
-                      background: "#fff",
-                      border: "1px solid #e5e7eb",
-                      borderRadius: 8,
-                      padding: "14px 20px",
-                      marginBottom: 10,
-                      cursor: "pointer",
-                      color: "#23272f",
-                      fontSize: 16,
-                      fontWeight: 500,
-                      transition: "background 0.2s",
-                      boxShadow: "0 1px 2px #f1f3f6",
-                    }}
-                    onMouseOver={(e) =>
-                      (e.currentTarget.style.background = "#f3f4f6")
-                    }
-                    onMouseOut={(e) =>
-                      (e.currentTarget.style.background = "#fff")
-                    }
-                  >
-                    <div style={{ fontWeight: 600 }}>{doc.filename}</div>
-                    <div
-                      style={{ fontSize: 14, color: "#6b7280", marginTop: 6 }}
-                    >
-                      Status:{" "}
-                      <span
-                        style={{
-                          color:
-                            doc.status === "processed"
-                              ? "#10b981" // green for processed
-                              : doc.status === "processing"
-                              ? "#f59e0b" // yellow for processing
-                              : "#9ca3af", // gray for uploaded
-                        }}
-                      >
-                        {doc.status.charAt(0).toUpperCase() +
-                          doc.status.slice(1)}
-                      </span>
-                    </div>
-                    <div
-                      style={{ fontSize: 13, color: "#9ca3af", marginTop: 2 }}
-                    >
-                      Uploaded: {new Date(doc.uploaded_at).toLocaleString()}
-                    </div>
-                    <div
-                      style={{ fontSize: 13, color: "#9ca3af", marginTop: 2 }}
-                    >
-                      Type:{" "}
-                      {doc.content_type.includes("pdf") ? "PDF" : "Text File"}
-                    </div>
-                  </button>
-                </li>
-              ))}
-            </ul>
-          ) : (
-            <p style={{ color: "#6b7280", fontSize: 16, marginTop: 20 }}>
-              No documents have been uploaded yet.
-            </p>
-          )}
-        </ul>
-      </section>
-    </div>
+          Upload Document
+        </Button>
+      </Box>
+      <List sx={{ width: '100%', p: 0, m: 0 }}>
+        {docsToShow.length > 0 ? (
+          docsToShow.map((doc) => (
+            <ListItem key={doc.uuid} disablePadding sx={{ mb: 1 }}>
+              <Paper
+                elevation={1}
+                sx={{
+                  width: '100%',
+                  borderRadius: 1,
+                  boxShadow: '0 1px 2px #f1f3f6',
+                  border: '1px solid #e5e7eb',
+                  mb: 0.5,
+                  '&:hover': { background: '#f3f4f6', cursor: 'pointer' },
+                  transition: 'background 0.2s',
+                }}
+                onClick={() => handleDocClick(doc.uuid)}
+              >
+                <Box sx={{ p: '14px 20px', display: 'flex', flexDirection: 'column' }}>
+                  <Typography sx={{ color: '#23272f', fontSize: 16, fontWeight: 500 }}>
+                    {doc.filename}
+                  </Typography>
+                  <Typography sx={{ color: '#6b7280', fontSize: 13 }}>
+                    Status: 
+                    <span style={{
+                      color:
+                        doc.status === "processed"
+                          ? "#10b981" // green for processed
+                          : doc.status === "processing"
+                          ? "#f59e0b" // yellow for processing
+                          : "#9ca3af", // gray for uploaded
+                    }}>
+                      {doc.status.charAt(0).toUpperCase() +
+                        doc.status.slice(1)}
+                    </span>
+                  </Typography>
+                  <Typography sx={{ fontSize: 13, color: "#9ca3af", marginTop: 2 }}>
+                    Uploaded: {new Date(doc.uploaded_at).toLocaleString()}
+                  </Typography>
+                  <Typography sx={{ fontSize: 13, color: "#9ca3af", marginTop: 2 }}>
+                    Type:{" "}
+                    {doc.content_type.includes("pdf") ? "PDF" : "Text File"}
+                  </Typography>
+                </Box>
+              </Paper>
+            </ListItem>
+          ))
+        ) : (
+          <Typography>No documents found.</Typography>
+        )}
+      </List>
+    </Box>
   );
 };
 

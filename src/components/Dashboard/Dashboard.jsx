@@ -5,36 +5,6 @@ import { Box, Button, Typography, Paper, List, ListItem } from "@mui/material";
 
 const baseUrl = import.meta.env.VITE_API_BASE_URL;
 
-const demoAPIDocs = [
-  {
-    uuid: "c6920bf2-2327-4796-aedc-da0b70f8d8e7",
-    filename: "report1.txt",
-    uploaded_at: "2025-04-25T13:10:53.761807",
-    uploader: "anonymous",
-    processed_at: null,
-    status: "uploaded",
-    content_type: "text/plain",
-  },
-  {
-    uuid: "c6920bf2-2327-4796-aedc",
-    filename: "report1.txt",
-    uploaded_at: "2025-04-25T13:10:53.761807",
-    uploader: "anonymous",
-    processed_at: null,
-    status: "processing",
-    content_type: "text/plain"
-  },
-  {
-    uuid: "c6920bf2-2327-4796-aedc-fenfjw",
-    filename: "report1.txt",
-    uploaded_at: "2025-04-25T13:10:53.761807",
-    uploader: "anonymous",
-    processed_at: null,
-    status: "processed",
-    content_type: "text/plain"
-  },
-];
-
 const Dashboard = () => {
   const navigate = useNavigate();
   const [documents, setDocuments] = useState([]);
@@ -53,8 +23,12 @@ const Dashboard = () => {
     fetchData();
   }, []);
 
-  const handleDocClick = (docId) => {
-    navigate(`/results/${docId}`);
+  const handleDocClick = (doc) => {
+	if (doc.status === "processed") {
+		navigate(`/results/${doc.uuid}`);
+	} else {
+		window.alert("This Doc is currently under processing. Please click another one which is processed to see the results.")
+	}
   };
 
   const handleUpload = async () => {
@@ -89,9 +63,6 @@ const Dashboard = () => {
     input.click();
   };
 
-  // Use demoAPIDocs for display
-  const docsToShow = demoAPIDocs;
-
   return (
     <Box sx={{ width: '90%', margin: '40px auto', p: 4, background: '#fafbfc', borderRadius: 2 }}>
       <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2, pb: 1, borderBottom: '1px solid #e5e7eb' }}>
@@ -116,8 +87,8 @@ const Dashboard = () => {
         </Button>
       </Box>
       <List sx={{ width: '100%', p: 0, m: 0 }}>
-        {docsToShow.length > 0 ? (
-          docsToShow.map((doc) => (
+        {documents.length > 0 ? (
+          documents.map((doc) => (
             <ListItem key={doc.uuid} disablePadding sx={{ mb: 1 }}>
               <Paper
                 elevation={1}
@@ -130,7 +101,7 @@ const Dashboard = () => {
                   '&:hover': { background: '#f3f4f6', cursor: 'pointer' },
                   transition: 'background 0.2s',
                 }}
-                onClick={() => handleDocClick(doc.uuid)}
+                onClick={() => handleDocClick(doc)}
               >
                 <Box sx={{ p: '14px 20px', display: 'flex', flexDirection: 'column' }}>
                   <Typography sx={{ color: '#23272f', fontSize: 16, fontWeight: 500 }}>
@@ -141,10 +112,10 @@ const Dashboard = () => {
                     <span style={{
                       color:
                         doc.status === "processed"
-                          ? "#10b981" // green for processed
+                          ? "#10b981"
                           : doc.status === "processing"
-                          ? "#f59e0b" // yellow for processing
-                          : "#9ca3af", // gray for uploaded
+                          ? "#f59e0b"
+                          : "#9ca3af",
                     }}>
                       {doc.status.charAt(0).toUpperCase() +
                         doc.status.slice(1)}

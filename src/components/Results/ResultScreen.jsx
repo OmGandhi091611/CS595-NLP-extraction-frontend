@@ -42,7 +42,7 @@ const ResultScreen = () => {
 	useEffect(() => {
 		const fetchData = async () => {
 		  try {
-			const response = await axios.get(`${baseUrl}/result`, {
+			const response = await axios.get(`${baseUrl}/document/result`, {
 				params: { uuid },
 			});
 			setResult(response.data);
@@ -138,7 +138,7 @@ const ResultScreen = () => {
       <Card variant="outlined" sx={{ mb: 3 }}>
         <CardContent>
           <Typography variant="h6">🗣️ Summary for Patients</Typography>
-          <Typography>{mockResult.patientSummary}</Typography>
+          <Typography>{result?.summary}</Typography>
         </CardContent>
       </Card>
 

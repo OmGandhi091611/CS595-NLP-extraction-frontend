@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
   Box,
   Container,
@@ -12,6 +12,10 @@ import {
   Divider,
   Grid,
 } from "@mui/material";
+import axios from "axios";
+import { useNavigate, useParams } from "react-router-dom";
+
+const baseUrl = import.meta.env.VITE_API_BASE_URL;
 
 const mockResult = {
   fileName: "Lab_Report_2025.pdf",
@@ -30,6 +34,60 @@ const mockResult = {
 };
 
 const ResultScreen = () => {
+	const { uuid } = useParams();
+	const navigate = useNavigate();
+
+	const [result, setResult] = useState();
+
+	useEffect(() => {
+		const fetchData = async () => {
+		  try {
+			const response = await axios.get(`${baseUrl}/result`, {
+				params: { uuid },
+			});
+			setResult(response.data);
+		  } catch (error) {
+			console.error("Error fetching result:", error);
+		  }
+		};
+		fetchData();
+	}, [uuid]);
+
+	console.log(result);
+
+	const handleFileUpload = async () => {
+		navigate("/dashboard");
+		const input = document.createElement("input");
+		input.type = "file";
+		input.accept = ".pdf,.txt";
+		input.onchange = async (e) => {
+		  const file = e.target.files[0];
+		  if (file) {
+			try {
+			  const formData = new FormData();
+			  formData.append("file", file);
+	
+			  const response = await axios.post(
+				`${baseUrl}/document/upload`,
+				formData,
+				{
+				  headers: {
+					"Content-Type": "multipart/form-data",
+				  },
+				}
+			  );
+	
+			  console.log("Upload successful:", response.data);
+			  alert("File uploaded successfully!");
+			} catch (error) {
+			  console.error("Upload failed:", error);
+			  alert("Failed to upload file.");
+			}
+		  }
+		};
+		input.click();
+	} 
+
   return (
     <Container maxWidth="md" sx={{ mt: 5 }}>
       <Typography variant="h4" gutterBottom>
@@ -87,7 +145,7 @@ const ResultScreen = () => {
       <Divider sx={{ my: 3 }} />
       <Grid container spacing={2} justifyContent="flex-end">
         <Grid item>
-          <Button variant="outlined">
+          <Button variant="outlined" onClick={() => {handleFileUpload()}}>
             Upload New Report
           </Button>
         </Grid>

@@ -86,6 +86,8 @@ const ResultScreen = () => {
 		input.click();
 	} 
 
+	console.log(result);
+
   return (
     <Container maxWidth="xl" sx={{ mt: 5 }}>
       <Typography variant="h4" gutterBottom>
@@ -121,15 +123,22 @@ const ResultScreen = () => {
         <CardContent>
           <Typography variant="h6">🧠 Predicted Medical Conditions</Typography>
           <List>
-            {mockResult.predictedConditions.map((cond, idx) => (
+            {result?.conditions.map((cond, idx) => (
               <ListItem key={idx}>
                 <ListItemText
-                  primary={cond.condition}
-                  secondary={`Confidence: ${(cond.confidence * 100).toFixed(1)}%`}
+                  primary={cond}
+                //   secondary={`Confidence: ${(cond.confidence * 100).toFixed(1)}%`}
                 />
               </ListItem>
             ))}
           </List>
+        </CardContent>
+      </Card>
+
+	  <Card variant="outlined" sx={{ mb: 3 }}>
+        <CardContent>
+          <Typography variant="h6">🗣️ Severity</Typography>
+          <Typography>{result?.severity}</Typography>
         </CardContent>
       </Card>
 

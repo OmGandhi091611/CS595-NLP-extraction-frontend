@@ -53,8 +53,6 @@ const ResultScreen = () => {
 		fetchData();
 	}, [uuid]);
 
-	console.log(result);
-
 	const handleFileUpload = async () => {
 		navigate("/dashboard");
 		const input = document.createElement("input");
@@ -97,8 +95,8 @@ const ResultScreen = () => {
       <Card variant="outlined" sx={{ mb: 3 }}>
         <CardContent>
           <Typography variant="h6">Uploaded File</Typography>
-          <Typography>Filename: {mockResult.fileName}</Typography>
-          <Typography>Uploaded At: {mockResult.uploadedAt}</Typography>
+          <Typography>Filename: {result?.filename}</Typography>
+          <Typography>Processed At: {new Date(result?.processed_at).toLocaleString()}</Typography>
           <Typography color="success.main">Status: Processed Successfully</Typography>
         </CardContent>
       </Card>

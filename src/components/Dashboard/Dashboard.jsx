@@ -51,8 +51,6 @@ const Dashboard = () => {
               },
             }
           );
-
-          console.log("Upload successful:", response.data);
           alert("File uploaded successfully!");
         } catch (error) {
           console.error("Upload failed:", error);

@@ -42,7 +42,7 @@ const Login = () => {
       localStorage.setItem('user', JSON.stringify(userObj));
       setUser(userObj);
 
-      window.alert(response.data.msg);
+      console.log(response.data.msg);
       navigate("/dashboard");
     } catch (err) {
       console.log("Login Failed", err);

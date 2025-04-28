@@ -120,7 +120,9 @@ const ResultScreen = () => {
 
       <Card variant="outlined" sx={{ mb: 3 }}>
         <CardContent>
+        {result?.severity && (
           <Typography variant="h6">Medical Severity: {result.severity.charAt(0).toUpperCase() + result.severity.slice(1)}</Typography>
+        )}
         </CardContent>
       </Card>
 

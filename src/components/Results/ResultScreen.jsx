@@ -10,6 +10,7 @@ import {
   ListItemText,
   Button,
   Divider,
+  Chip,
   Grid,
 } from "@mui/material";
 import axios from "axios";
@@ -121,24 +122,37 @@ const ResultScreen = () => {
 
       <Card variant="outlined" sx={{ mb: 3 }}>
         <CardContent>
-          <Typography variant="h6">🧠 Predicted Medical Conditions</Typography>
-          <List>
-            {result?.conditions.map((cond, idx) => (
-              <ListItem key={idx}>
-                <ListItemText
-                  primary={cond}
-                //   secondary={`Confidence: ${(cond.confidence * 100).toFixed(1)}%`}
-                />
-              </ListItem>
-            ))}
-          </List>
+        {result?.severity && (
+          <Typography variant="h6">Medical Severity: {result.severity.charAt(0).toUpperCase() + result.severity.slice(1)}</Typography>
+        )}
         </CardContent>
       </Card>
 
-	  <Card variant="outlined" sx={{ mb: 3 }}>
+
+
+      <Card variant="outlined" sx={{ mb: 3 }}>
         <CardContent>
-          <Typography variant="h6">🗣️ Severity</Typography>
-          <Typography>{result?.severity}</Typography>
+          <Typography variant="h6">🧠 Predicted Medical Conditions</Typography>
+          {result?.conditions && result.conditions.length > 0 ? (
+            <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1, mt: 2 }}>
+              {result.conditions.map((condition, idx) => (
+                <Chip
+                  key={idx}
+                  label={condition}
+                  color="primary"
+                  variant="outlined"
+                  sx={{ 
+                    borderRadius: '16px',
+                    fontSize: '0.9rem',
+                    fontWeight: 500,
+                    my: 0.5
+                  }}
+                />
+              ))}
+            </Box>
+          ) : (
+            <Typography color="text.secondary">No conditions detected</Typography>
+          )}
         </CardContent>
       </Card>
 

@@ -27,7 +27,7 @@ const Dashboard = () => {
 	if (doc.status === "processed") {
 		navigate(`/results/${doc.uuid}`);
 	} else {
-		window.alert("This Doc is currently under processing. Please click another one which is processed to see the results.")
+		window.alert("This Doc is currently under processing. Please click another one which is processed to see the results.");
 	}
   };
 
@@ -52,6 +52,7 @@ const Dashboard = () => {
             }
           );
           alert("File uploaded successfully!");
+		  window.location.reload();
         } catch (error) {
           console.error("Upload failed:", error);
           alert("Failed to upload file.");

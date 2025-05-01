@@ -41,7 +41,7 @@ const Navbar = () => {
   return (
     <Box component="nav" sx={{
       width: '100%',
-      background: '#222',
+      background: '#1c9af3',
       color: '#fff',
       py: '12px',
       mb: 4.5,

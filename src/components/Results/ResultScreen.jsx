@@ -30,127 +30,6 @@ const ResultScreen = () => {
     setResult(found);
   }, [uuid]);
 
-  const laboratoryReport = {
-    uuid: "c520fda9-739c-424c-a38a-f0a9c070bc6e",
-    filename: "LabReportJaneSmith.pdf",
-    summary:
-      "Jane Smith, a 43-year-old female, presented with mild anemia indicated by a hemoglobin level of 10.2 g/dL, and mild thrombocytopenia with a platelet count of 145 x10^9/L. Additionally, her fasting blood glucose level was elevated at 130 mg/dL, suggesting impaired glucose tolerance. The laboratoryReport indicates that her white blood cell count and creatinine levels were within normal ranges. Overall, the findings suggest mild health concerns that may require monitoring and management.",
-    severity: "mild",
-    processed_at: "2025-04-30T15:06:55.201333",
-    conditions: [
-      {
-        name: "Mild Anemia",
-        code: "D50.9",
-        coding_system: "ICD-10",
-      },
-      {
-        name: "Mild Thrombocytopenia",
-        code: "D69.6",
-        coding_system: "ICD-10",
-      },
-      {
-        name: "Impaired Glucose Tolerance",
-        code: "R73.9",
-        coding_system: "ICD-10",
-      },
-    ],
-    labs: [
-      {
-        name: "Hemoglobin",
-        value: "10.2",
-        unit: "g/dL",
-        interpretation: "Mild anemia",
-        loinc_code: "",
-      },
-      {
-        name: "White Blood Cell Count",
-        value: "7.5",
-        unit: "x10^9/L",
-        interpretation: "",
-        loinc_code: "",
-      },
-      {
-        name: "Platelets",
-        value: "145",
-        unit: "x10^9/L",
-        interpretation: "Mild thrombocytopenia",
-        loinc_code: "",
-      },
-      {
-        name: "Blood Glucose (Fasting)",
-        value: "130",
-        unit: "mg/dL",
-        interpretation:
-          "Elevated fasting glucose suggestive of impaired glucose tolerance",
-        loinc_code: "",
-      },
-      {
-        name: "Creatinine",
-        value: "1.0",
-        unit: "mg/dL",
-        interpretation: "",
-        loinc_code: "",
-      },
-      {
-        name: "ALT (SGPT)",
-        value: "55",
-        unit: "U/L",
-        interpretation: "",
-        loinc_code: "",
-      },
-    ],
-    procedures: [],
-    medications: [],
-  };
-
-  const pathologyReport = {
-    uuid: "189b85c2-e695-4577-8925-bbbef2ab794a",
-    filename: "PathologyReportLauraAnderson.pdf",
-    summary:
-      "Laura Anderson underwent a core needle biopsy of a left breast mass, which revealed moderately differentiated invasive ductal carcinoma (Grade II). The tumor exhibits a positive status for estrogen and progesterone receptors, while being negative for HER2. No lymphovascular invasion was identified in the biopsy. The findings suggest a localized breast cancer that may respond to hormone therapy due to its receptor status.",
-    severity: "moderate",
-    processed_at: "2025-04-30T15:34:24.879465",
-    conditions: [
-      {
-        name: "Invasive ductal carcinoma",
-        code: "C50.912",
-        coding_system: "ICD-10",
-      },
-    ],
-    labs: [],
-    procedures: [
-      {
-        name: "Core needle biopsy",
-        cpt_code: "19100",
-      },
-    ],
-    medications: [],
-  };
-
-  const radiologyReport = {
-    uuid: "804aee43-76dd-42df-9eb4-3eb5c6bf20d4",
-    filename: "RadiologyReportMarkJohnson.pdf",
-    summary:
-      "The MRI Brain study of Mark Johnson reveals a 6 mm T2 hyperintense lesion in the right frontal white matter, with no associated diffusion restriction or enhancement. The ventricular system appears normal, and there is no evidence of acute infarction, hemorrhage, or mass effect. The impression suggests that the T2 hyperintensity is likely due to non-specific chronic microvascular changes, with no signs of acute pathology.",
-    severity: "mild",
-    processed_at: "2025-04-30T15:35:12.987819",
-    conditions: [
-      {
-        name: "T2 hyperintensity in right frontal lobe",
-        code: "I67.4",
-        coding_system: "ICD-10",
-      },
-    ],
-    labs: [],
-    procedures: [
-      {
-        name: "MRI Brain without contrast",
-        cpt_code: "70551",
-      },
-    ],
-    medications: [],
-  };
-
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -194,6 +73,23 @@ const ResultScreen = () => {
 
   if (!result) return null;
 
+  const formatFilename = (filename) => {
+    if (!filename) return "";
+    const nameWithoutExtension = filename.replace(/\.[^/.]+$/, "");
+    const parts = nameWithoutExtension.match(/[A-Z]?[a-z]+|[A-Z]+(?![a-z])/g);
+    if (!parts || parts.length < 2) return filename;
+
+    const extension = filename.split(".").pop();
+    const formatted =
+      parts.slice(0, -2).join(" ") +
+      " - " +
+      parts.slice(-2).join(" ") +
+      `.${extension}`;
+    return formatted;
+  };
+
+  console.log(result);
+
   return (
     <Container maxWidth="xl" className="results-container">
       <Typography
@@ -215,17 +111,20 @@ const ResultScreen = () => {
               📁 Uploaded File
             </Typography>
             <Typography variant="body2">
-              Filename: {laboratoryReport.filename}
+              Filename: {formatFilename(result.filename)}
             </Typography>
             <Typography variant="body2">
-              Processed:{" "}
-              {new Date(laboratoryReport.processed_at).toLocaleString()}
-            </Typography>
-            <Typography variant="body2" color="success.main">
-              Status: Success
+              Processed: {new Date(result.processed_at).toLocaleString()}
             </Typography>
             <Typography variant="body2">
-              Severity: <b>{laboratoryReport.severity}</b>
+              Status: <span style={{ color: "#2e7d32" }}>Success</span>
+            </Typography>
+            <Typography variant="body2">
+              Severity:{" "}
+              <b>
+                {result.severity?.charAt(0).toUpperCase() +
+                  result.severity?.slice(1)}
+              </b>
             </Typography>
           </Card>
 
@@ -233,15 +132,26 @@ const ResultScreen = () => {
             <Typography variant="subtitle2" className="result-title">
               🧠 Predicted Conditions
             </Typography>
-            {laboratoryReport.conditions?.length ? (
+            {result.conditions?.length ? (
               <Box sx={{ display: "flex", flexWrap: "wrap" }}>
-                {laboratoryReport.conditions.map((c, i) => (
+                {result.conditions.map((c, i) => (
                   <Chip
-                    key={i}
-                    label={`${c.name} (${c.code})`}
-                    size="small"
-                    className="result-chip"
-                  />
+				  key={i}
+				  label={
+					<Box sx={{ textAlign: "center", lineHeight: 1.3 }}>
+					  <div style={{ fontWeight: 600, fontSize: "0.8rem" }}>{c.name}</div>
+					  <div style={{ fontSize: "0.7rem", color: "#555" }}>{c.code}</div>
+					</Box>
+				  }
+				  size="medium"
+				  className="result-chip"
+				  sx={{
+					height: "auto",
+					paddingTop: "6px",
+					paddingBottom: "6px",
+					paddingX: "8px",
+				  }}
+				/>
                 ))}
               </Box>
             ) : (
@@ -253,12 +163,12 @@ const ResultScreen = () => {
         </Grid>
 
         <Grid item xs={12} md={6}>
-          {laboratoryReport.labs?.length > 0 && (
+          {result.labs?.length > 0 && (
             <Card className="result-card">
               <Typography variant="subtitle2" className="result-title">
                 🔬 Lab Reports
               </Typography>
-              {laboratoryReport.labs.map((lab, idx) => (
+              {result.labs.map((lab, idx) => (
                 <Typography variant="body2" key={idx} sx={{ mb: 0.75 }}>
                   <b>{lab.name}</b>: {lab.value} {lab.unit}
                   {lab.interpretation && (
@@ -277,7 +187,7 @@ const ResultScreen = () => {
             <Typography variant="subtitle2" className="result-title">
               📌 Patient Summary
             </Typography>
-            <Typography variant="body2">{laboratoryReport.summary}</Typography>
+            <Typography variant="body2">{result.summary}</Typography>
           </Card>
         </Grid>
       </Grid>
